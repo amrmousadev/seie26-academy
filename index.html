@@ -48,6 +48,26 @@ a{color:var(--blue);text-decoration:none}
 .setup-hint{font-size:11px;color:var(--text2);margin-top:8px}
 .setup-hint a{color:var(--amber)}
 
+/* ADMIN LOCK */
+.admin-only{display:none}
+body.is-admin .admin-only{display:inline-flex}
+body.is-admin .admin-only-block{display:block}
+.admin-only-block{display:none}
+.lock-btn{font-size:11px;padding:4px 10px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;font-family:var(--mono)}
+.lock-btn:hover{border-color:var(--amber);color:var(--amber)}
+.lock-btn.unlocked{border-color:var(--green);color:var(--green)}
+.login-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:999;display:none}
+.login-overlay.show{display:flex}
+.login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:28px 32px;width:320px;text-align:center}
+.login-box h3{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px}
+.login-box p{font-size:12px;color:var(--text2);margin-bottom:18px}
+.login-box input{width:100%;font-size:14px;padding:9px 14px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text);text-align:center;font-family:var(--mono);margin-bottom:12px;letter-spacing:.1em}
+.login-box input:focus{outline:none;border-color:var(--blue-dim)}
+.login-box .err-msg{font-size:12px;color:var(--red);margin-bottom:10px;min-height:18px}
+.login-actions{display:flex;gap:8px;justify-content:center}
+.login-submit{font-size:13px;padding:8px 24px;background:var(--blue-dim);border:none;border-radius:var(--radius);color:#fff;cursor:pointer;font-family:var(--sans)}
+.login-cancel{font-size:13px;padding:8px 16px;background:transparent;border:1px solid var(--border2);border-radius:var(--radius);color:var(--text2);cursor:pointer;font-family:var(--sans)}
+
 /* STATS */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:20px 24px 0}
 .stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
@@ -149,7 +169,8 @@ td{padding:9px 12px;vertical-align:middle;word-break:break-word}
       <div class="sync-dot" id="sync-dot"></div>
       <span id="sync-label">غير متصل</span>
     </div>
-    <button class="btn" onclick="toggleSetup()">⚙ إعداد</button>
+    <button class="lock-btn" id="lock-btn" onclick="toggleAdmin()">🔒 Admin</button>
+    <button class="btn admin-only" onclick="toggleSetup()">⚙ إعداد</button>
     <button class="btn btn-primary" onclick="exportCSV()">تصدير CSV</button>
   </div>
 </div>
@@ -164,6 +185,19 @@ td{padding:9px 12px;vertical-align:middle;word-break:break-word}
   <div class="setup-hint">
     أنشئ Token من: <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a>
     — اختر صلاحية <strong>repo</strong> فقط. الـ Repo يكون تحت حساب <strong>amrmousadev</strong>.
+  </div>
+</div>
+
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <h3>Admin Access</h3>
+    <p>أدخل كلمة المرور للتعديل</p>
+    <input type="password" id="admin-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkPass()"/>
+    <div class="err-msg" id="pass-err"></div>
+    <div class="login-actions">
+      <button class="login-cancel" onclick="closeLogin()">إلغاء</button>
+      <button class="login-submit" onclick="checkPass()">دخول</button>
+    </div>
   </div>
 </div>
 
@@ -220,7 +254,7 @@ td{padding:9px 12px;vertical-align:middle;word-break:break-word}
     </div>
 
     <div class="toolbar">
-      <button class="btn btn-primary" onclick="openCourseForm()">+ إضافة كورس</button>
+      <button class="btn btn-primary admin-only" onclick="openCourseForm()">+ إضافة كورس</button>
       <input class="search" type="text" id="search" placeholder="بحث..." oninput="renderCourses()"/>
       <select id="filt-mod" onchange="renderCourses()">
         <option value="">كل الموديولات</option>
@@ -282,7 +316,7 @@ td{padding:9px 12px;vertical-align:middle;word-break:break-word}
     </div>
 
     <div class="toolbar">
-      <button class="btn btn-primary" onclick="openUpdateForm()">+ تحديث جديد</button>
+      <button class="btn btn-primary admin-only" onclick="openUpdateForm()">+ تحديث جديد</button>
       <select id="filt-utype" onchange="renderUpdates()">
         <option value="">كل الأنواع</option>
         <option value="STR">STR</option><option value="REV">REV</option>
@@ -334,6 +368,40 @@ let editCourseId=null;
 let ghToken='',ghRepo='',ghOwner='amrmousadev';
 let dataSha='';
 let saveTimer=null;
+
+const ADMIN_HASH='af463b601a7ce5f5ecf1329413d40d1889c6389e785c92ee0a6b68d348482989';
+let isAdmin=false;
+
+async function sha256(msg){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(msg));return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');}
+
+function toggleAdmin(){
+  if(isAdmin){logoutAdmin();}
+  else{document.getElementById('login-overlay').classList.add('show');document.getElementById('admin-pass').value='';document.getElementById('pass-err').textContent='';setTimeout(()=>document.getElementById('admin-pass').focus(),100);}
+}
+async function checkPass(){
+  const val=document.getElementById('admin-pass').value;
+  const hash=await sha256(val);
+  if(hash===ADMIN_HASH){
+    isAdmin=true;
+    document.body.classList.add('is-admin');
+    document.getElementById('lock-btn').textContent='🔓 Admin';
+    document.getElementById('lock-btn').classList.add('unlocked');
+    document.getElementById('login-overlay').classList.remove('show');
+    renderAll();
+  } else {
+    document.getElementById('pass-err').textContent='كلمة المرور غلط';
+    document.getElementById('admin-pass').value='';
+    document.getElementById('admin-pass').focus();
+  }
+}
+function logoutAdmin(){
+  isAdmin=false;
+  document.body.classList.remove('is-admin');
+  document.getElementById('lock-btn').textContent='🔒 Admin';
+  document.getElementById('lock-btn').classList.remove('unlocked');
+  renderAll();
+}
+function closeLogin(){document.getElementById('login-overlay').classList.remove('show');}
 
 // CONFIG
 function loadConfig(){
@@ -452,8 +520,8 @@ function renderCourses(){
       <td><span class="mono">${c.ver||'—'}</span></td>
       <td><span class="badge ${ST[c.status]?.cls||'b-plan'}">${ST[c.status]?.label||c.status}</span></td>
       <td>
-        <button class="act-btn" onclick="editCourse('${c.id}')">تعديل</button>
-        <button class="act-btn act-del" onclick="delCourse('${c.id}')">حذف</button>
+        <button class="act-btn admin-only" onclick="editCourse('${c.id}')">تعديل</button>
+        <button class="act-btn act-del admin-only" onclick="delCourse('${c.id}')">حذف</button>
       </td>
     </tr>`).join('');
 }
@@ -472,7 +540,7 @@ function renderUpdates(){
       <td style="font-weight:500;font-size:12px">${u.title}</td>
       <td style="color:#8b949e;font-size:11px">${u.details||'—'}</td>
       <td style="font-size:11px;color:#8b949e">${u.date}</td>
-      <td><button class="act-btn act-del" onclick="delUpdate('${u.id}')">حذف</button></td>
+      <td><button class="act-btn act-del admin-only" onclick="delUpdate('${u.id}')">حذف</button></td>
     </tr>`).join('');
 }
 
