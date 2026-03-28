@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seie26-M1-10 | AGC110 — Computational Thinking with Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0D1117;
+  --surface:#161B22;
+  --surface2:#1C2128;
+  --border:#30363D;
+  --border2:#444C56;
+  --accent:#E8653A;
+  --accent-dim:#7A2F10;
+  --text:#E6EDF3;
+  --text2:#8B949E;
+  --text3:#6E7681;
+  --code:#79C0FF;
+  --green:#3FB950;
+  --amber:#D29922;
+  --section-h:#F0883E;
+}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Cairo',sans-serif;
+  font-size:15px;
+  line-height:1.6;
+  min-height:100vh;
+}
+/* ─── Header ─── */
+.header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:24px 32px;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.header-inner{
+  max-width:1100px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:12px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.brand-logo{
+  width:38px;
+  height:38px;
+  background:var(--accent);
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:600;
+  font-size:13px;
+  color:#fff;
+  letter-spacing:0;
+}
+.brand-name{
+  font-size:17px;
+  font-weight:700;
+  color:var(--text);
+}
+.brand-sub{
+  font-size:12px;
+  color:var(--text2);
+  margin-top:2px;
+}
+.version-badge{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  color:var(--text2);
+  padding:4px 10px;
+  border-radius:20px;
+  letter-spacing:0.5px;
+}
+/* ─── Main ─── */
+.main{
+  max-width:1100px;
+  margin:0 auto;
+  padding:32px 32px 64px;
+}
+/* ─── Course Card ─── */
+.course-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  margin-bottom:24px;
+}
+.course-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:20px 24px;
+  cursor:pointer;
+  user-select:none;
+  transition:background 0.15s;
+}
+.course-header:hover{
+  background:var(--surface2);
+}
+.course-code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  font-weight:600;
+  color:var(--accent);
+  background:rgba(232,101,58,0.12);
+  border:1px solid rgba(232,101,58,0.25);
+  padding:4px 10px;
+  border-radius:6px;
+  white-space:nowrap;
+}
+.course-info{flex:1}
+.course-name{
+  font-size:18px;
+  font-weight:700;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.course-name-en{
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  color:var(--text3);
+}
+.course-meta{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  margin-top:6px;
+}
+.meta-pill{
+  font-size:11px;
+  color:var(--text2);
+  background:var(--surface2);
+  border:1px solid var(--border);
+  padding:2px 10px;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.meta-pill .dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--green);
+}
+.meta-pill .dot.amber{background:var(--amber)}
+.expand-icon{
+  width:28px;height:28px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--text2);
+  font-size:16px;
+  transition:transform 0.2s, background 0.15s;
+  flex-shrink:0;
+}
+.course-card.open .expand-icon{
+  transform:rotate(180deg);
+  background:var(--surface2);
+}
+/* ─── Lessons Body ─── */
+.lessons-body{
+  display:none;
+  border-top:1px solid var(--border);
+}
+.course-card.open .lessons-body{display:block}
+/* ─── Section Label ─── */
+.section-label{
+  padding:14px 24px 10px;
+  font-size:11px;
+  font-weight:600;
+  color:var(--section-h);
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  background:rgba(240,136,62,0.04);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section-label::before{
+  content:'';
+  display:inline-block;
+  width:3px;height:14px;
+  background:var(--section-h);
+  border-radius:2px;
+}
+/* ─── Table ─── */
+.table-wrap{overflow-x:auto}
+table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:14px;
+}
+thead th{
+  padding:12px 20px;
+  text-align:right;
+  font-size:11px;
+  font-weight:600;
+  color:var(--text3);
+  letter-spacing:1px;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+  background:var(--surface2);
+}
+thead th:first-child{text-align:center}
+tbody tr{
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:background 0.12s;
+}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--surface2)}
+tbody tr.active{background:rgba(232,101,58,0.05)}
+td{
+  padding:14px 20px;
+  vertical-align:top;
+  color:var(--text);
+}
+td:first-child{
+  text-align:center;
+  width:140px;
+}
+.lesson-code{
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;
+  font-weight:600;
+  color:var(--code);
+  white-space:nowrap;
+}
+.lesson-name{
+  font-weight:600;
+  font-size:14px;
+  color:var(--text);
+  margin-bottom:3px;
+}
+.lesson-desc{
+  font-size:12px;
+  color:var(--text2);
+  font-family:'JetBrains Mono',monospace;
+}
+.topics-col{
+  width:55%;
+  direction:rtl;
+}
+/* ─── Topic expand ─── */
+.topics-preview{
+  color:var(--text2);
+  font-size:13px;
+}
+.topics-full{
+  display:none;
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px dashed var(--border);
+}
+tr.active .topics-full{display:block}
+.topic-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.topic-list li{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  font-size:13px;
+  color:var(--text);
+  line-height:1.5;
+}
+.topic-list li::before{
+  content:'▸';
+  color:var(--accent);
+  font-size:10px;
+  margin-top:3px;
+  flex-shrink:0;
+}
+.video-count{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  color:var(--amber);
+  background:rgba(210,153,34,0.1);
+  border:1px solid rgba(210,153,34,0.2);
+  padding:2px 8px;
+  border-radius:4px;
+  margin-top:6px;
+}
+/* ─── Stats bar ─── */
+.stats-bar{
+  display:flex;
+  align-items:center;
+  gap:24px;
+  padding:14px 24px;
+  border-top:1px solid var(--border);
+  background:var(--surface2);
+  flex-wrap:wrap;
+}
+.stat{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  color:var(--text2);
+}
+.stat-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:16px;
+  font-weight:600;
+  color:var(--text);
+}
+.stat-sep{
+  width:1px;height:20px;
+  background:var(--border);
+}
+/* ─── Footer ─── */
+.footer{
+  text-align:center;
+  padding:24px;
+  color:var(--text3);
+  font-size:12px;
+  border-top:1px solid var(--border);
+  font-family:'JetBrains Mono',monospace;
+}
+.footer span{color:var(--text2)}
+/* ─── RTL table fix ─── */
+@media(max-width:700px){
+  .main{padding:16px 12px 48px}
+  .header{padding:16px}
+  .topics-col{width:auto}
+  td:first-child{width:auto}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-logo">AGC</div>
+      <div>
+        <div class="brand-name">SEIE Track 2026</div>
+        <div class="brand-sub">Software Experience Industry Engineering</div>
+      </div>
+    </div>
+    <div class="version-badge">v1.1</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="course-card" id="agc110">
+    <div class="course-header" onclick="toggleCourse('agc110')">
+      <div class="course-code">Seie26-M1-10</div>
+      <div class="course-info">
+        <div class="course-name">التفكير الحسابي مع بايثون</div>
+        <div class="course-name-en">AGC110 — Computational Thinking with Python</div>
+        <div class="course-meta">
+          <div class="meta-pill"><span class="dot"></span>Module 1 — Foundation</div>
+          <div class="meta-pill"><span class="dot amber"></span>15 درس · 30 فيديو</div>
+        </div>
+      </div>
+      <div class="expand-icon" id="icon-agc110">▾</div>
+    </div>
+
+    <div class="lessons-body" id="body-agc110">
+
+      <!-- Section 1 -->
+      <div class="section-label">القسم الأول — البداية (3 دروس)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>كود الدرس</th>
+              <th>اسم الدرس</th>
+              <th class="topics-col">الموضوع — بالترتيب المنطقي للشرح</th>
+            </tr>
+          </thead>
+          <tbody id="sec1-agc110"></tbody>
+        </table>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="section-label">القسم الثاني — الأساس البرمجي (11 درس)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>كود الدرس</th>
+              <th>اسم الدرس</th>
+              <th class="topics-col">الموضوع — بالترتيب المنطقي للشرح</th>
+            </tr>
+          </thead>
+          <tbody id="sec2-agc110"></tbody>
+        </table>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="section-label">القسم الثالث — مشروع التخرج (درس واحد)</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>كود الدرس</th>
+              <th>اسم الدرس</th>
+              <th class="topics-col">الموضوع — بالترتيب المنطقي للشرح</th>
+            </tr>
+          </thead>
+          <tbody id="sec3-agc110"></tbody>
+        </table>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat"><div class="stat-num">15</div><div>درس</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><div class="stat-num">30</div><div>فيديو</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><div class="stat-num">3</div><div>أقسام</div></div>
+        <div class="stat-sep"></div>
+        <div class="stat"><div class="stat-num">1</div><div>مشروع تخرج</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>AGC Academy</span> · seie26-academy · Seie26-M1-10 · v1.1
+</div>
+
+<script>
+const sec1 = [
+  {
+    code:"M1-10-L01",
+    name:"أول مرة في حياتك بتكتب كود",
+    desc:"First Program · Python Setup",
+    videos:2,
+    topics:[
+      "ما هو الكود وما هو البرنامج — بلغة المشروع الحقيقي",
+      "لماذا Python أول لغة — المقارنة العملية",
+      "تثبيت Python 3 على الجهاز",
+      "تثبيت VS Code وإعداد البيئة",
+      "أول برنامج: print('مرحبا يا مصر')",
+      "فهم دورة الكود: كتابة ← تشغيل ← نتيجة",
+      "الفرق بين الخطأ وعدم التشغيل"
+    ]
+  },
+  {
+    code:"M1-10-L02",
+    name:"الذكاء الاصطناعي زميلك في الشغل",
+    desc:"AI as Production Tool · Day 1",
+    videos:2,
+    topics:[
+      "ليه الـ AI مش غشاشة — هو أداة إنتاج زي الآلة الحاسبة",
+      "ChatGPT / GitHub Copilot — الفرق العملي",
+      "كيف تطلب من الـ AI يكتب كود صح",
+      "كيف تقرأ الكود اللي الـ AI بيكتبه",
+      "استخدام الـ AI لفهم رسائل الخطأ",
+      "حدود الـ AI — امتى لازم تفهم بنفسك"
+    ]
+  },
+  {
+    code:"M1-10-L03",
+    name:"إزاي الكمبيوتر بيتذكر البيانات",
+    desc:"Variables · Data Types",
+    videos:2,
+    topics:[
+      "مفهوم المتغير — صندوق في ذاكرة الكمبيوتر",
+      "أنواع البيانات: int — float — str — bool",
+      "تسمية المتغيرات بالطريقة الصحيحة",
+      "التعيين المتعدد والتعيين في سطر واحد",
+      "type() — معرفة نوع المتغير",
+      "تطبيق: متغيرات فاتورة (اسم المنتج — السعر — الكمية)",
+      "الفرق بين القيمة والاسم"
+    ]
+  }
+];
+
+const sec2 = [
+  {
+    code:"M1-10-L04",
+    name:"احسب يا برنامج",
+    desc:"Arithmetic · Profit & Discount",
+    videos:2,
+    topics:[
+      "العمليات الحسابية: + − * /",
+      "القسمة الصحيحة // والباقي %",
+      "الأسس **",
+      "ترتيب العمليات PEMDAS",
+      "تحويل الأنواع: int() — float() — str()",
+      "تطبيق: حساب الربح = (سعر البيع − سعر الشراء) × الكمية",
+      "تطبيق: حساب الخصم والسعر بعد الخصم"
+    ]
+  },
+  {
+    code:"M1-10-L05",
+    name:"البرنامج يتكلم ويسمع",
+    desc:"Input · Output · f-strings",
+    videos:2,
+    topics:[
+      "print() — كل طرق الطباعة",
+      "input() — استقبال البيانات من المستخدم",
+      "تحويل المدخل من نص لرقم",
+      "f-strings — تنسيق المخرجات الاحترافي",
+      "sep= و end= في print()",
+      "تطبيق: برنامج يسأل اسم العميل والمبلغ ويطبع إيصال",
+      "تنسيق الأرقام: .2f للمبالغ المالية"
+    ]
+  },
+  {
+    code:"M1-10-L06",
+    name:"القرار في يد البرنامج",
+    desc:"if / elif / else · Conditions",
+    videos:2,
+    topics:[
+      "مفهوم الشرط في البرمجة",
+      "if — elif — else",
+      "عوامل المقارنة: == != > < >= <=",
+      "عوامل المنطق: and — or — not",
+      "التداخل Nested if",
+      "تطبيق: هل العميل يستحق خصم؟ (بناءً على المبلغ)",
+      "تطبيق: تصنيف الفاتورة (صغيرة / متوسطة / كبيرة)",
+      "تطبيق: أهلية التقسيط (الراتب والعمر)"
+    ]
+  },
+  {
+    code:"M1-10-L07",
+    name:"كرر بدون تعب",
+    desc:"for / while · break / continue",
+    videos:2,
+    topics:[
+      "لماذا التكرار — المشكلة اللي بيحلها",
+      "for loop مع range()",
+      "while loop — متى نستخدمه",
+      "break — الخروج من الحلقة",
+      "continue — تخطي تكرار معين",
+      "تطبيق: حساب مجموع مشتريات العميل (n منتج)",
+      "تطبيق: طباعة جدول الأسعار من 1 لـ 100",
+      "تجنب الحلقة اللانهائية"
+    ]
+  },
+  {
+    code:"M1-10-L08",
+    name:"علّم البرنامج وظيفة",
+    desc:"Functions · def · return",
+    videos:2,
+    topics:[
+      "ليه الدوال — مشكلة التكرار والتنظيم",
+      "def — تعريف الدالة",
+      "Parameters و Arguments",
+      "return — إرجاع النتيجة",
+      "الدالة بدون return",
+      "Default parameters",
+      "Scope — متغيرات داخل وخارج الدالة",
+      "تطبيق: دالة حساب_الإجمالي(سعر، كمية، خصم)",
+      "تطبيق: دالة طباعة_الفاتورة()"
+    ]
+  },
+  {
+    code:"M1-10-L09",
+    name:"قائمة منتجات المتجر",
+    desc:"Lists · CRUD · Iteration",
+    videos:2,
+    topics:[
+      "ما هي القائمة — مجموعة بيانات في متغير واحد",
+      "إنشاء القائمة وإضافة عناصر (append)",
+      "الوصول للعناصر بالـ index",
+      "تعديل وحذف عناصر (remove — pop)",
+      "الدوران على القائمة بـ for",
+      "len() — عدد العناصر",
+      "sorted() — ترتيب القائمة",
+      "تطبيق: قائمة منتجات فاتورة (اسم + سعر + كمية)",
+      "تطبيق: حساب إجمالي الفاتورة من القائمة"
+    ]
+  },
+  {
+    code:"M1-10-L10",
+    name:"شكّل النص زي ما تحب",
+    desc:"String Methods · Formatting · Slicing",
+    videos:2,
+    topics:[
+      "النص string كسلسلة من الحروف",
+      "upper() — lower() — title() — strip()",
+      "replace() — split() — join()",
+      "in — التحقق من وجود نص داخل نص",
+      "Slicing: نص[من:لغاية]",
+      "len() على النص",
+      "تطبيق: تنسيق اسم العميل والمنتج في الفاتورة",
+      "تطبيق: تنسيق رأس الإيصال بشكل احترافي"
+    ]
+  },
+  {
+    code:"M1-10-L11",
+    name:"الملف بيتذكر بعد ما البرنامج يقفل",
+    desc:"File I/O · open · read · write",
+    videos:2,
+    topics:[
+      "لماذا الملفات — مشكلة فقد البيانات",
+      "open() — أوضاع الفتح: r — w — a",
+      "write() — الكتابة في الملف",
+      "read() و readlines() — القراءة",
+      "with open() — الطريقة الآمنة",
+      "تطبيق: حفظ الفاتورة في ملف txt",
+      "تطبيق: قراءة ملخص المبيعات اليومية من الملف",
+      "تطبيق: إضافة فاتورة جديدة لنفس الملف (append)"
+    ]
+  },
+  {
+    code:"M1-10-L12",
+    name:"لما البرنامج يغلط",
+    desc:"try / except · Error Handling",
+    videos:2,
+    topics:[
+      "أنواع الأخطاء في Python",
+      "SyntaxError — ValueError — ZeroDivisionError — FileNotFoundError",
+      "try / except — التعامل مع الخطأ",
+      "except نوع_الخطأ — التعامل مع خطأ محدد",
+      "else في try — كود التنفيذ الناجح",
+      "finally — كود ينفذ دايما",
+      "تطبيق: حماية إدخال المستخدم (أرقام غلط — ملف مش موجود)",
+      "تطبيق: رسالة خطأ واضحة للمستخدم"
+    ]
+  },
+  {
+    code:"M1-10-L13",
+    name:"مشروع الفاتورة — الجزء الأول",
+    desc:"Invoice Project Part 1 · Build",
+    videos:2,
+    topics:[
+      "مراجعة متطلبات المشروع كـ brief حقيقي",
+      "تصميم هيكل البرنامج قبل الكتابة",
+      "إنشاء متغيرات بيانات المتجر",
+      "استقبال بيانات المنتجات من المستخدم",
+      "حساب الإجمالي مع الضريبة (VAT 14%) والخصم",
+      "طباعة الفاتورة بشكل منسق",
+      "استخدام الـ AI للمراجعة والتحسين"
+    ]
+  },
+  {
+    code:"M1-10-L14",
+    name:"مشروع الفاتورة — الجزء الثاني",
+    desc:"Invoice Project Part 2 · Polish",
+    videos:2,
+    topics:[
+      "تحويل الكود لدوال منظمة",
+      "استخدام القوائم لحفظ المنتجات",
+      "حفظ الفاتورة في ملف txt",
+      "ملخص المبيعات اليومية من الملفات",
+      "إضافة معالجة الأخطاء لكل إدخال",
+      "اختبار البرنامج بسيناريوهات حقيقية",
+      "مراجعة جودة الكود بالـ AI"
+    ]
+  }
+];
+
+const sec3 = [
+  {
+    code:"M1-10-L15",
+    name:"مشروع التخرج — نظام إدارة الفواتير",
+    desc:"Final Project · Invoice Management System",
+    videos:2,
+    topics:[
+      "تسليم البريف النهائي للمشروع",
+      "تخطيط الحل الكامل (خريطة ذهنية / خطوات)",
+      "بناء النظام: إدخال منتجات متعددة",
+      "بناء النظام: حساب الإجمالي + VAT + خصم حسب المبلغ",
+      "بناء النظام: طباعة فاتورة منسقة احترافياً",
+      "بناء النظام: حفظ كل الفواتير في ملف",
+      "بناء النظام: تقرير ملخص المبيعات اليومية",
+      "معالجة جميع حالات الخطأ",
+      "مراجعة الكود بالـ AI وتحسينه",
+      "تسجيل فيديو الشرح (2-3 دقائق)"
+    ]
+  }
+];
+
+function buildRows(data, tbodyId){
+  const tbody = document.getElementById(tbodyId);
+  data.forEach((lesson, idx)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML=`
+      <td>
+        <div class="lesson-code">${lesson.code}</div>
+        <div class="video-count">▶ ${lesson.videos} فيديو</div>
+      </td>
+      <td>
+        <div class="lesson-name">${lesson.name}</div>
+        <div class="lesson-desc">${lesson.desc}</div>
+      </td>
+      <td class="topics-col">
+        <div class="topics-preview">${lesson.topics[0]} …</div>
+        <div class="topics-full">
+          <ul class="topic-list">
+            ${lesson.topics.map(t=>`<li>${t}</li>`).join('')}
+          </ul>
+        </div>
+      </td>
+    `;
+    tr.addEventListener('click',()=>{
+      const wasActive = tr.classList.contains('active');
+      tbody.querySelectorAll('tr').forEach(r=>r.classList.remove('active'));
+      if(!wasActive) tr.classList.add('active');
+    });
+    tbody.appendChild(tr);
+  });
+}
+
+buildRows(sec1,'sec1-agc110');
+buildRows(sec2,'sec2-agc110');
+buildRows(sec3,'sec3-agc110');
+
+function toggleCourse(id){
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
