@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Seie26 — AGC Academy Curriculum</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#0d1117; --bg2:#161b22; --bg3:#21262d;
+  --border:#30363d; --border2:#484f58;
+  --text:#e6edf3; --text2:#8b949e; --text3:#6e7681;
+  --blue:#58a6ff; --blue-bg:#0d2340; --blue-dim:#1f6feb;
+  --green:#3fb950; --green-bg:#0d2b1a;
+  --amber:#d29922; --amber-bg:#2b1d0e;
+  --red:#f85149; --red-bg:#2b0e0e;
+  --purple:#bc8cff; --purple-bg:#1c1040;
+  --teal:#39d353; --teal-bg:#0d2b1a;
+  --radius:6px; --radius-lg:10px;
+  --mono:'IBM Plex Mono',monospace;
+  --sans:'Tajawal',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;min-height:100vh}
+a{color:var(--blue);text-decoration:none}
+
+/* HEADER */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+.logo{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--blue);letter-spacing:.05em}
+.logo span{color:var(--text2)}
+.header-title{font-size:15px;font-weight:500;color:var(--text)}
+.header-right{margin-right:auto;display:flex;align-items:center;gap:10px}
+.sync-status{font-family:var(--mono);font-size:11px;display:flex;align-items:center;gap:6px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--text3)}
+.sync-dot.ok{background:var(--green);box-shadow:0 0 6px var(--green)}
+.sync-dot.saving{background:var(--amber);animation:pulse 1s infinite}
+.sync-dot.err{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* SETUP BANNER */
+.setup-banner{background:var(--amber-bg);border:1px solid var(--amber);border-radius:var(--radius-lg);padding:16px 20px;margin:20px 24px;display:none}
+.setup-banner.show{display:block}
+.setup-banner h3{color:var(--amber);font-size:14px;font-weight:500;margin-bottom:10px}
+.setup-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.setup-banner input{flex:1;min-width:200px;font-family:var(--mono);font-size:12px;padding:7px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius);color:var(--text)}
+.setup-banner input:focus{outline:none;border-color:var(--amber)}
+.setup-btn{font-size:12px;padding:7px 16px;background:var(--amber);color:#000;border:none;border-radius:var(--radius);cursor:pointer;font-weight:500;white-space:nowrap}
+.setup-hint{font-size:11px;color:var(--text2);margin-top:8px}
+.setup-hint a{color:var(--amber)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:20px 24px 0}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px}
+.stat .v{font-size:26px;font-weight:700;color:var(--text);font-family:var(--mono)}
+.stat .l{font-size:11px;color:var(--text2);margin-top:3px}
+.stat.s-done .v{color:var(--green)}
+.stat.s-wip .v{color:var(--amber)}
+.stat.s-upd .v{color:var(--blue)}
+
+/* MAIN */
+.main{padding:16px 24px}
+
+/* TABS */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:16px}
+.tab{font-size:13px;padding:8px 16px;background:transparent;border:none;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:var(--sans)}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab:hover{color:var(--text)}
+
+/* TOOLBAR */
+.toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.toolbar input,.toolbar select{font-size:12px;padding:6px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--sans)}
+.toolbar input:focus,.toolbar select:focus{outline:none;border-color:var(--blue-dim)}
+.toolbar select option{background:var(--bg2)}
+.search{flex:1;min-width:160px;max-width:260px}
+.btn{font-size:12px;padding:6px 14px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:var(--sans)}
+.btn:hover{background:var(--bg3);color:var(--text)}
+.btn-primary{background:var(--blue-dim);border-color:var(--blue-dim);color:#fff}
+.btn-primary:hover{background:#388bfd}
+.btn-danger{border-color:var(--red);color:var(--red)}
+.btn-danger:hover{background:var(--red-bg)}
+
+/* FORM PANEL */
+.form-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:16px;display:none}
+.form-panel.open{display:block}
+.form-panel h4{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:14px;border-bottom:1px solid var(--border);padding-bottom:10px}
+.fgrid4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.fgrid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.field label{font-size:11px;color:var(--text3);display:block;margin-bottom:4px;font-family:var(--mono)}
+.field input,.field select,.field textarea{width:100%;font-size:12px;padding:6px 10px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--sans)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--blue-dim)}
+.field select option{background:var(--bg3)}
+.field textarea{min-height:60px;resize:vertical}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius-lg)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{background:var(--bg2)}
+th{font-size:11px;font-weight:500;color:var(--text3);text-align:right;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;font-family:var(--mono)}
+tbody tr{border-bottom:1px solid var(--border)}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:var(--bg2)}
+td{padding:9px 12px;vertical-align:middle;word-break:break-word}
+
+/* BADGES */
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:20px;font-family:var(--mono);white-space:nowrap}
+.bm1{background:var(--blue-bg);color:var(--blue);border:1px solid #1f6feb}
+.bm2{background:var(--green-bg);color:var(--green);border:1px solid #2ea043}
+.bm3{background:var(--purple-bg);color:var(--purple);border:1px solid #6e40c9}
+.bm4{background:var(--amber-bg);color:var(--amber);border:1px solid #9e6a03}
+.bm5{background:var(--red-bg);color:var(--red);border:1px solid #b91c1c}
+.bm6{background:#0d2b1a;color:var(--teal);border:1px solid #238636}
+.b-done{background:var(--green-bg);color:var(--green);border:1px solid #2ea043}
+.b-wip{background:var(--amber-bg);color:var(--amber);border:1px solid #9e6a03}
+.b-plan{background:var(--bg3);color:var(--text3);border:1px solid var(--border2)}
+.b-str{background:var(--blue-bg);color:var(--blue);border:1px solid #1f6feb}
+.b-rev{background:var(--amber-bg);color:var(--amber);border:1px solid #9e6a03}
+.b-qs{background:var(--green-bg);color:var(--green);border:1px solid #2ea043}
+.b-fix{background:var(--red-bg);color:var(--red);border:1px solid #b91c1c}
+.mono{font-family:var(--mono);font-size:11px;color:var(--text2)}
+.act-btn{font-size:10px;padding:2px 8px;border-radius:var(--radius);border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;margin-left:4px;font-family:var(--sans)}
+.act-btn:hover{background:var(--bg3);color:var(--text)}
+.act-del{border-color:var(--red);color:var(--red)}
+.act-del:hover{background:var(--red-bg)}
+.empty{text-align:center;padding:40px;color:var(--text3);font-size:13px}
+
+/* NOTIFICATION */
+.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:10px 20px;font-size:12px;font-family:var(--mono);color:var(--text2);display:none;z-index:999;animation:slideup .2s ease}
+.notif.show{display:block}
+.notif.ok{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.notif.err{border-color:var(--red);color:var(--red);background:var(--red-bg)}
+@keyframes slideup{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media(max-width:700px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .fgrid4,.fgrid3{grid-template-columns:1fr 1fr}
+  .header-title{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Seie26<span>/AGC</span></div>
+  <div class="header-title">Curriculum Database</div>
+  <div class="header-right">
+    <div class="sync-status" id="sync-status">
+      <div class="sync-dot" id="sync-dot"></div>
+      <span id="sync-label">غير متصل</span>
+    </div>
+    <button class="btn" onclick="toggleSetup()">⚙ إعداد</button>
+    <button class="btn btn-primary" onclick="exportCSV()">تصدير CSV</button>
+  </div>
+</div>
+
+<div class="setup-banner" id="setup-banner">
+  <h3>ربط GitHub للحفظ التلقائي</h3>
+  <div class="setup-row">
+    <input id="inp-token" type="password" placeholder="GitHub Personal Access Token (ghp_...)"/>
+    <input id="inp-repo" type="text" placeholder="اسم الـ Repo (مثال: seie26-academy)"/>
+    <button class="setup-btn" onclick="saveConfig()">حفظ وتفعيل</button>
+  </div>
+  <div class="setup-hint">
+    أنشئ Token من: <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens</a>
+    — اختر صلاحية <strong>repo</strong> فقط. الـ Repo يكون تحت حساب <strong>amrmousadev</strong>.
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="v" id="st-total">0</div><div class="l">إجمالي الكورسات</div></div>
+  <div class="stat s-done"><div class="v" id="st-done">0</div><div class="l">Completed</div></div>
+  <div class="stat s-wip"><div class="v" id="st-wip">0</div><div class="l">In Progress</div></div>
+  <div class="stat s-upd"><div class="v" id="st-upd">0</div><div class="l">إجمالي التحديثات</div></div>
+</div>
+
+<div class="main">
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('courses',this)">الكورسات</button>
+    <button class="tab" onclick="switchTab('updates',this)">سجل التحديثات</button>
+  </div>
+
+  <!-- COURSES TAB -->
+  <div id="tab-courses">
+    <div class="form-panel" id="course-panel">
+      <h4 id="course-panel-title">إضافة كورس جديد</h4>
+      <div class="fgrid4">
+        <div class="field"><label>الكود</label><input id="f-code" placeholder="Seie26-M1-10"/></div>
+        <div class="field"><label>الموديول</label>
+          <select id="f-mod">
+            <option value="M1">M1 — Foundation</option>
+            <option value="M2">M2 — Desktop Production</option>
+            <option value="M3">M3 — Web Production</option>
+            <option value="M4">M4 — Mobile Production</option>
+            <option value="M5">M5 — AI Production</option>
+            <option value="M6">M6 — Career Launch</option>
+          </select>
+        </div>
+        <div class="field"><label>الإصدار</label><input id="f-ver" placeholder="v1.0"/></div>
+        <div class="field"><label>الحالة</label>
+          <select id="f-status">
+            <option value="planned">Planned</option>
+            <option value="wip">In Progress</option>
+            <option value="done">Completed</option>
+          </select>
+        </div>
+      </div>
+      <div class="fgrid2">
+        <div class="field"><label>Title</label><input id="f-title" placeholder="Computational Thinking & Visual Dev"/></div>
+        <div class="field"><label>المشروع</label><input id="f-proj" placeholder="مشروع: فواتير محل"/></div>
+      </div>
+      <div class="fgrid2">
+        <div class="field"><label>المحتوى / التقنيات</label><textarea id="f-tech" placeholder="Python + AI + WinForms C#"></textarea></div>
+        <div class="field"><label>ملاحظات</label><textarea id="f-notes"></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeCourseForm()">إلغاء</button>
+        <button class="btn btn-primary" onclick="saveCourse()">حفظ</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="openCourseForm()">+ إضافة كورس</button>
+      <input class="search" type="text" id="search" placeholder="بحث..." oninput="renderCourses()"/>
+      <select id="filt-mod" onchange="renderCourses()">
+        <option value="">كل الموديولات</option>
+        <option value="M1">M1 — Foundation</option>
+        <option value="M2">M2 — Desktop Production</option>
+        <option value="M3">M3 — Web Production</option>
+        <option value="M4">M4 — Mobile Production</option>
+        <option value="M5">M5 — AI Production</option>
+        <option value="M6">M6 — Career Launch</option>
+      </select>
+      <select id="filt-status" onchange="renderCourses()">
+        <option value="">كل الحالات</option>
+        <option value="done">Completed</option>
+        <option value="wip">In Progress</option>
+        <option value="planned">Planned</option>
+      </select>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <colgroup>
+          <col style="width:120px"><col style="width:145px"><col style="width:175px">
+          <col style="width:185px"><col style="width:100px"><col style="width:55px">
+          <col style="width:70px"><col style="width:90px">
+        </colgroup>
+        <thead><tr>
+          <th>الكود</th><th>الموديول</th><th>Title</th><th>المحتوى</th>
+          <th>المشروع</th><th>إصدار</th><th>الحالة</th><th>إجراء</th>
+        </tr></thead>
+        <tbody id="courses-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- UPDATES TAB -->
+  <div id="tab-updates" style="display:none">
+    <div class="form-panel" id="update-panel">
+      <h4>تسجيل تحديث جديد</h4>
+      <div class="fgrid3">
+        <div class="field"><label>النوع</label>
+          <select id="u-type">
+            <option value="STR">STR — استراتيجي</option>
+            <option value="REV">REV — مراجعة كورس</option>
+            <option value="QS">QS — قرار سريع</option>
+            <option value="FIX">FIX — تصحيح</option>
+          </select>
+        </div>
+        <div class="field"><label>الكورس المتأثر</label><input id="u-course" placeholder="Seie26-M1-10"/></div>
+        <div class="field"><label>الإصدار الجديد</label><input id="u-ver" placeholder="v1.2"/></div>
+      </div>
+      <div class="fgrid2">
+        <div class="field"><label>عنوان التحديث</label><input id="u-title" placeholder="وصف موجز..."/></div>
+        <div class="field"><label>التفاصيل</label><textarea id="u-details"></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn" onclick="closeUpdateForm()">إلغاء</button>
+        <button class="btn btn-primary" onclick="saveUpdate()">حفظ</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="openUpdateForm()">+ تحديث جديد</button>
+      <select id="filt-utype" onchange="renderUpdates()">
+        <option value="">كل الأنواع</option>
+        <option value="STR">STR</option><option value="REV">REV</option>
+        <option value="QS">QS</option><option value="FIX">FIX</option>
+      </select>
+      <select id="filt-umod" onchange="renderUpdates()">
+        <option value="">كل الموديولات</option>
+        <option value="M1">M1 — Foundation</option>
+        <option value="M2">M2 — Desktop Production</option>
+        <option value="M3">M3 — Web Production</option>
+        <option value="M4">M4 — Mobile Production</option>
+        <option value="M5">M5 — AI Production</option>
+        <option value="M6">M6 — Career Launch</option>
+      </select>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <colgroup>
+          <col style="width:110px"><col style="width:55px"><col style="width:110px"><col style="width:60px">
+          <col style="width:165px"><col style="width:200px"><col style="width:90px"><col style="width:60px">
+        </colgroup>
+        <thead><tr>
+          <th>كود</th><th>نوع</th><th>الكورس</th><th>إصدار</th>
+          <th>العنوان</th><th>التفاصيل</th><th>التاريخ</th><th>إجراء</th>
+        </tr></thead>
+        <tbody id="updates-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="notif" id="notif"></div>
+
+<script>
+const MODS={
+  M1:{label:'M1 — Foundation',badge:'bm1'},
+  M2:{label:'M2 — Desktop Production',badge:'bm2'},
+  M3:{label:'M3 — Web Production',badge:'bm3'},
+  M4:{label:'M4 — Mobile Production',badge:'bm4'},
+  M5:{label:'M5 — AI Production',badge:'bm5'},
+  M6:{label:'M6 — Career Launch',badge:'bm6'}
+};
+const ST={done:{label:'Completed',cls:'b-done'},wip:{label:'In Progress',cls:'b-wip'},planned:{label:'Planned',cls:'b-plan'}};
+const UT={STR:'b-str',REV:'b-rev',QS:'b-qs',FIX:'b-fix'};
+
+let db={courses:[],updates:[],meta:{uctr:5,cctr:0}};
+let editCourseId=null;
+let ghToken='',ghRepo='',ghOwner='amrmousadev';
+let dataSha='';
+let saveTimer=null;
+
+// CONFIG
+function loadConfig(){
+  ghToken=localStorage.getItem('gh_token')||'';
+  ghRepo=localStorage.getItem('gh_repo')||'';
+  if(ghToken&&ghRepo){
+    document.getElementById('inp-token').value=ghToken;
+    document.getElementById('inp-repo').value=ghRepo;
+  } else {
+    document.getElementById('setup-banner').classList.add('show');
+  }
+}
+function saveConfig(){
+  ghToken=document.getElementById('inp-token').value.trim();
+  ghRepo=document.getElementById('inp-repo').value.trim();
+  if(!ghToken||!ghRepo){notify('أدخل الـ Token والـ Repo','err');return;}
+  localStorage.setItem('gh_token',ghToken);
+  localStorage.setItem('gh_repo',ghRepo);
+  document.getElementById('setup-banner').classList.remove('show');
+  loadFromGitHub();
+}
+function toggleSetup(){
+  document.getElementById('setup-banner').classList.toggle('show');
+}
+
+// SYNC STATUS
+function setSyncStatus(state,label){
+  const dot=document.getElementById('sync-dot');
+  const lbl=document.getElementById('sync-label');
+  dot.className='sync-dot'+(state?' '+state:'');
+  lbl.textContent=label;
+}
+
+// GITHUB API
+const API='https://api.github.com';
+function ghHeaders(){return{'Authorization':'token '+ghToken,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'};}
+
+async function loadFromGitHub(){
+  if(!ghToken||!ghRepo){loadLocalFallback();return;}
+  setSyncStatus('saving','جاري التحميل...');
+  try{
+    const r=await fetch(`${API}/repos/${ghOwner}/${ghRepo}/contents/data.json`,{headers:ghHeaders()});
+    if(!r.ok)throw new Error('not found');
+    const j=await r.json();
+    dataSha=j.sha;
+    db=JSON.parse(atob(j.content.replace(/\n/g,'')));
+    setSyncStatus('ok','متزامن');
+    renderAll();
+  }catch(e){
+    setSyncStatus('err','خطأ في الاتصال');
+    notify('تعذر التحميل من GitHub — يتم تحميل البيانات المحلية','err');
+    loadLocalFallback();
+  }
+}
+
+async function pushToGitHub(){
+  if(!ghToken||!ghRepo){setSyncStatus('','offline');return;}
+  setSyncStatus('saving','جاري الحفظ...');
+  const content=btoa(unescape(encodeURIComponent(JSON.stringify(db,null,2))));
+  const body={message:'Seie26 update — '+new Date().toISOString().split('T')[0],content};
+  if(dataSha)body.sha=dataSha;
+  try{
+    const r=await fetch(`${API}/repos/${ghOwner}/${ghRepo}/contents/data.json`,{method:'PUT',headers:ghHeaders(),body:JSON.stringify(body)});
+    if(!r.ok)throw new Error('push failed');
+    const j=await r.json();
+    dataSha=j.content.sha;
+    setSyncStatus('ok','تم الحفظ ✓');
+    notify('تم الحفظ على GitHub','ok');
+  }catch(e){
+    setSyncStatus('err','فشل الحفظ');
+    notify('فشل الحفظ على GitHub','err');
+  }
+}
+
+function scheduleSync(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>pushToGitHub(),1200);
+  setSyncStatus('saving','جاري الحفظ...');
+}
+
+async function loadLocalFallback(){
+  try{
+    const r=await fetch('./data.json');
+    db=await r.json();
+  }catch(e){db={courses:[],updates:[],meta:{uctr:5,cctr:0}};}
+  renderAll();
+}
+
+// RENDER
+function renderAll(){
+  renderStats();renderCourses();renderUpdates();
+}
+function renderStats(){
+  document.getElementById('st-total').textContent=db.courses.length;
+  document.getElementById('st-done').textContent=db.courses.filter(c=>c.status==='done').length;
+  document.getElementById('st-wip').textContent=db.courses.filter(c=>c.status==='wip').length;
+  document.getElementById('st-upd').textContent=db.updates.length;
+}
+function renderCourses(){
+  const q=(document.getElementById('search').value||'').toLowerCase();
+  const fm=document.getElementById('filt-mod').value;
+  const fs=document.getElementById('filt-status').value;
+  let list=db.courses.filter(c=>{
+    const m=!q||(c.code+c.title+c.tech+c.proj).toLowerCase().includes(q);
+    return m&&(!fm||c.mod===fm)&&(!fs||c.status===fs);
+  });
+  const tb=document.getElementById('courses-body');
+  if(!list.length){tb.innerHTML='<tr><td colspan="8" class="empty">لا توجد نتائج</td></tr>';return;}
+  tb.innerHTML=list.map(c=>`
+    <tr>
+      <td><span class="mono">${c.code}</span></td>
+      <td><span class="badge ${MODS[c.mod]?.badge||'bm1'}">${MODS[c.mod]?.label||c.mod}</span></td>
+      <td style="font-weight:500;font-size:12px">${c.title}</td>
+      <td style="color:#8b949e;font-size:11px">${c.tech}</td>
+      <td style="font-size:11px">${c.proj||'—'}</td>
+      <td><span class="mono">${c.ver||'—'}</span></td>
+      <td><span class="badge ${ST[c.status]?.cls||'b-plan'}">${ST[c.status]?.label||c.status}</span></td>
+      <td>
+        <button class="act-btn" onclick="editCourse('${c.id}')">تعديل</button>
+        <button class="act-btn act-del" onclick="delCourse('${c.id}')">حذف</button>
+      </td>
+    </tr>`).join('');
+}
+function renderUpdates(){
+  const ft=document.getElementById('filt-utype').value;
+  const fm=document.getElementById('filt-umod').value;
+  let list=db.updates.filter(u=>(!ft||u.type===ft)&&(!fm||u.course.includes('-'+fm+'-')));
+  const tb=document.getElementById('updates-body');
+  if(!list.length){tb.innerHTML='<tr><td colspan="8" class="empty">لا توجد تحديثات</td></tr>';return;}
+  tb.innerHTML=list.map(u=>`
+    <tr>
+      <td><span class="mono">${u.code}</span></td>
+      <td><span class="badge ${UT[u.type]||''}">${u.type}</span></td>
+      <td><span class="mono" style="font-size:10px">${u.course||'—'}</span></td>
+      <td><span class="mono">${u.ver||'—'}</span></td>
+      <td style="font-weight:500;font-size:12px">${u.title}</td>
+      <td style="color:#8b949e;font-size:11px">${u.details||'—'}</td>
+      <td style="font-size:11px;color:#8b949e">${u.date}</td>
+      <td><button class="act-btn act-del" onclick="delUpdate('${u.id}')">حذف</button></td>
+    </tr>`).join('');
+}
+
+// COURSES CRUD
+function openCourseForm(){editCourseId=null;clearCourseForm();document.getElementById('course-panel-title').textContent='إضافة كورس جديد';document.getElementById('course-panel').classList.add('open');}
+function closeCourseForm(){document.getElementById('course-panel').classList.remove('open');editCourseId=null;}
+function clearCourseForm(){['f-code','f-title','f-tech','f-proj','f-notes','f-ver'].forEach(i=>document.getElementById(i).value='');document.getElementById('f-mod').value='M1';document.getElementById('f-status').value='planned';}
+function saveCourse(){
+  const code=document.getElementById('f-code').value.trim();
+  const title=document.getElementById('f-title').value.trim();
+  if(!code||!title){notify('الكود والعنوان مطلوبان','err');return;}
+  const today=new Date().toISOString().split('T')[0];
+  const obj={id:editCourseId||('c'+(++db.meta.cctr)),code,mod:document.getElementById('f-mod').value,title,tech:document.getElementById('f-tech').value.trim(),proj:document.getElementById('f-proj').value.trim(),notes:document.getElementById('f-notes').value.trim(),ver:document.getElementById('f-ver').value.trim()||'v1.0',status:document.getElementById('f-status').value,date:today};
+  if(editCourseId){const i=db.courses.findIndex(c=>c.id===editCourseId);if(i>-1)db.courses[i]=obj;}
+  else db.courses.push(obj);
+  renderAll();closeCourseForm();scheduleSync();
+}
+function editCourse(id){
+  const c=db.courses.find(x=>x.id===id);if(!c)return;
+  editCourseId=id;
+  document.getElementById('f-code').value=c.code;
+  document.getElementById('f-mod').value=c.mod;
+  document.getElementById('f-title').value=c.title;
+  document.getElementById('f-tech').value=c.tech;
+  document.getElementById('f-proj').value=c.proj;
+  document.getElementById('f-notes').value=c.notes;
+  document.getElementById('f-ver').value=c.ver;
+  document.getElementById('f-status').value=c.status;
+  document.getElementById('course-panel-title').textContent='تعديل الكورس';
+  document.getElementById('course-panel').classList.add('open');
+}
+function delCourse(id){if(!confirm('حذف الكورس؟'))return;db.courses=db.courses.filter(c=>c.id!==id);renderAll();scheduleSync();}
+
+// UPDATES CRUD
+function openUpdateForm(){document.getElementById('update-panel').classList.add('open');}
+function closeUpdateForm(){document.getElementById('update-panel').classList.remove('open');['u-course','u-ver','u-title','u-details'].forEach(i=>document.getElementById(i).value='');}
+function saveUpdate(){
+  const title=document.getElementById('u-title').value.trim();if(!title){notify('العنوان مطلوب','err');return;}
+  const type=document.getElementById('u-type').value;
+  const n=String(db.meta.uctr).padStart(2,'0');
+  const today=new Date().toISOString().split('T')[0];
+  db.updates.unshift({id:'u'+(db.meta.uctr++),code:`Seie26-${type}-${n}`,type,course:document.getElementById('u-course').value.trim(),ver:document.getElementById('u-ver').value.trim(),title,details:document.getElementById('u-details').value.trim(),date:today});
+  renderAll();closeUpdateForm();scheduleSync();
+}
+function delUpdate(id){if(!confirm('حذف التحديث؟'))return;db.updates=db.updates.filter(u=>u.id!==id);renderAll();scheduleSync();}
+
+// TABS
+function switchTab(name,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-courses').style.display=name==='courses'?'block':'none';
+  document.getElementById('tab-updates').style.display=name==='updates'?'block':'none';
+}
+
+// EXPORT CSV
+function exportCSV(){
+  const h='الكود,الموديول,Title,المحتوى,المشروع,الإصدار,الحالة,التاريخ\n';
+  const rows=db.courses.map(c=>[c.code,MODS[c.mod]?.label||c.mod,c.title,c.tech,c.proj,c.ver,ST[c.status]?.label,c.date].map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+h+rows],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Seie26-Curriculum.csv';a.click();
+}
+
+// NOTIFY
+function notify(msg,type){
+  const n=document.getElementById('notif');
+  n.textContent=msg;n.className='notif show'+(type?' '+type:'');
+  setTimeout(()=>n.classList.remove('show'),3000);
+}
+
+// INIT
+loadConfig();
+if(ghToken&&ghRepo)loadFromGitHub();
+else loadLocalFallback();
+</script>
+</body>
+</html>

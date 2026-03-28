@@ -1,0 +1,31 @@
+{
+  "meta": { "version": "Seie26", "lastUpdated": "2026-03-28", "uctr": 5, "cctr": 20 },
+  "courses": [
+    {"id":"c1","code":"Seie26-M1-01","mod":"M1","title":"Information Systems Fundamentals","tech":"نظم المعلومات","proj":"","notes":"","ver":"v1.0","status":"done","date":"2026-03-28"},
+    {"id":"c2","code":"Seie26-M1-10","mod":"M1","title":"Computational Thinking & Visual Dev","tech":"Python + AI + WinForms C#","proj":"فواتير محل","notes":"","ver":"v1.1","status":"wip","date":"2026-03-28"},
+    {"id":"c3","code":"Seie26-M1-15","mod":"M1","title":"Data Connectivity & First Production App","tech":"طرق الربط + Connection Strings + ADO.NET","proj":"POS","notes":"","ver":"v1.2","status":"wip","date":"2026-03-28"},
+    {"id":"c4","code":"Seie26-M1-20","mod":"M1","title":"C++ Thinking + DSA & OOP Mastery","tech":"C++ Functions/Loops/Memory + DSA + OOP بالـ C#","proj":"","notes":"","ver":"v1.2","status":"planned","date":"2026-03-28"},
+    {"id":"c5","code":"Seie26-M1-25","mod":"M1","title":"Capstone — Inventory Management System","tech":"تطبيق عملي شامل باستخدام DSA + OOP","proj":"نظام إدارة مخزن","notes":"","ver":"v1.3","status":"planned","date":"2026-03-28"},
+    {"id":"c6","code":"Seie26-M2-10","mod":"M2","title":"Database Design & Management","tech":"SQL كامل + MongoDB + Security","proj":"DB شركة تجارية","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c7","code":"Seie26-M2-20","mod":"M2","title":"Business Desktop Applications","tech":"C# + ADO.NET/EF + DevExpress + HTML Reports + Git","proj":"HR & Payroll","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c8","code":"Seie26-M3-10","mod":"M3","title":"Web Foundations","tech":"HTML / CSS / JS","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c9","code":"Seie26-M3-20","mod":"M3","title":"Modern Frontend Development","tech":"React + TypeScript + Next.js + Tailwind","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c10","code":"Seie26-M3-30","mod":"M3","title":"Backend Engineering with Node.js","tech":"Node.js + Express + Prisma + MongoDB + Redis","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c11","code":"Seie26-M3-40","mod":"M3","title":"Backend Development with Python","tech":"Django / FastAPI (الفروق فقط)","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c12","code":"Seie26-M3-50","mod":"M3","title":"Backend Development with PHP","tech":"Laravel (الفروق فقط)","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c13","code":"Seie26-M3-60","mod":"M3","title":"Backend Development with .NET","tech":"ASP.NET Core + EF + SignalR (الفروق فقط)","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c14","code":"Seie26-M3-70","mod":"M3","title":"Authentication & Security","tech":"JWT / OAuth / RBAC","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c15","code":"Seie26-M3-80","mod":"M3","title":"Software Architecture & Design","tech":"Design Patterns + Microservices","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c16","code":"Seie26-M3-90","mod":"M3","title":"Cloud & DevOps Engineering","tech":"Docker + AWS + GitHub Actions + CI/CD","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c17","code":"Seie26-M4-10","mod":"M4","title":"Cross-Platform Mobile Development","tech":"Flutter + Dart + Firebase + Provider + Play Store","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c18","code":"Seie26-M5-10","mod":"M5","title":"AI-Powered Application Development","tech":"OpenAI / LangChain / RAG / Vector DB","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c19","code":"Seie26-M5-20","mod":"M5","title":"Intelligent Workflow Automation","tech":"N8N / MCP / AI Agents","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"},
+    {"id":"c20","code":"Seie26-M6-10","mod":"M6","title":"Career Readiness & Launch","tech":"DSA Interview + Portfolio + GitHub + LinkedIn + Mock Interviews + Agile","proj":"","notes":"","ver":"v1.0","status":"planned","date":"2026-03-28"}
+  ],
+  "updates": [
+    {"id":"u1","code":"Seie26-STR-01","type":"STR","course":"Seie26-M1-10","ver":"v1.1","title":"نقل WinForms C# من M1-15 إلى M1-10","details":"دمج WinForms مع Python+AI في نفس السيشن","date":"2026-03-28"},
+    {"id":"u2","code":"Seie26-STR-02","type":"STR","course":"Seie26-M1-15","ver":"v1.2","title":"إعادة هيكلة M1-15 — Data Connectivity","details":"طرق الربط + ADO.NET + مشروع POS كدايرة إنتاج أولى","date":"2026-03-28"},
+    {"id":"u3","code":"Seie26-STR-03","type":"STR","course":"Seie26-M1-20","ver":"v1.2","title":"دمج C++ Thinking مع DSA & OOP","details":"C++ Functions/Loops/Memory + DSA+OOP في سيشن واحدة","date":"2026-03-28"},
+    {"id":"u4","code":"Seie26-STR-04","type":"STR","course":"Seie26-M1-25","ver":"v1.3","title":"M1-25 Capstone باستخدام DSA+OOP فقط","details":"مشروع نظام إدارة مخزن باستخدام ما تم دراسته في DSA+OOP","date":"2026-03-28"}
+  ]
+}
